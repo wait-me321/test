@@ -1026,6 +1026,50 @@ layui.define(['layer', 'form', "storageTable_tab", "laypage", "element", "laytpl
   $(".sousuo-btn").on("click", function () {
     active.sousuo()
   })
+
+
+  $(".return_btn").on("click", function () {
+    index = layer.open({
+      title: "扫码入库",
+        type: 1,
+        maxmin: true,
+        area: ['750px', '750px'],
+        offset: '0',
+        content: $("#return_box").html(), //这里content是一个普通的String
+        success: function (layero, index) {
+          layui.form.render();
+          form.render(null, 'addstock_son');
+          if ($(document).width() < 600) {
+            layer.full(index)
+          }
+          $(layero.selector + " .saoma").on("keydown",function(e){
+              e=e||event
+              if(e.keyCode==13){
+                if($(this).val()!=""){
+                  $(layero.selector + " [name=malist]").val($(layero.selector + " [name=malist]").val()+$(this).val()+"\n")
+                  $(this).val("")
+                  $(this).focus()
+                }
+                
+              }
+          })
+          $(layero.selector + " .add0").on("click",function(e){
+            if($(layero.selector + " .saoma").val()!=""){
+              $(layero.selector + " [name=malist]").val($(layero.selector + " [name=malist]").val()+$(layero.selector + " .saoma").val()+"\n")
+              $(layero.selector + " .saoma").val("")
+              $(layero.selector + " .saoma").focus()
+            }
+          })
+          form.on('submit(return_box)', function (data) {
+
+            alert(JSON.stringify(data.field))
+
+            return false;
+        });
+
+        }
+    });
+  })
   exports('storageTable', {}); //注意，这里是模块输出的核心，模块名必须和use时的模块名一致
 
 });
