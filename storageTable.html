@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>库存管理</title>
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/storageTable.css">
+</head>
+
+<body>
+    <div class="top_nav">
+        <div class="border_left">库存管理</div>
+    </div>
+    <div class="show_div">
+        <div class="layui-row">
+            <div class="layui-col-xs12 layui-col-sm2 layui-col-md2 layui-col-lg2 show_box">
+                <div class="layui-col-item active addstock">
+                    <div class="item font1">商品入库</div>
+                    <div class="item font2">点击</div>
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2 show_box">
+                <div class="layui-col-item ">
+                    <div class="item font1">当前总库存</div>
+                    <div class="item font2">***</div>
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2 show_box">
+                <div class="layui-col-item ">
+                    <div class="item font1">现有库存</div>
+                    <div class="item font2">***</div>
+                </div>
+            </div>
+            <!-- <div class="layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2 show_box">
+                <div class="layui-col-item ">
+                    <div class="item font1 "> <span class="parent">待处理 <div class="icon"><img src="img/waitE.png" alt=""></div></span> </div>
+                   
+                    <div class="item font2">000</div>
+                </div>
+            </div> -->
+            <div class="layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2 show_box">
+                <div class="layui-col-item ">
+                    <div class="item font1">已废弃</div>
+                    <div class="item font2">***</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <blockquote class="layui-elem-quote layui-quote-nm ">
+        <div class="layui-form sousuo" lay-filter="sousuo">
+            <div class="layui-row">
+                <div class="layui-col-xs12 layui-col-sm2 layui-col-lg2">
+                    <input class="layui-input  " name="phone"  autocomplete="off" placeholder="请输入商品编号"
+                        />
+                </div>
+                        
+                <div class="layui-col-xs12 layui-col-sm2 layui-col-lg1">
+                    <button class="layui-btn layui-btn-danger layui-btn-fluid  sousuo-btn" lay-submit lay-filter="">搜索</button>
+                </div>
+                
+            </div>
+        </div>
+    </blockquote>
+    <table id="storageTable" lay-filter="storageTable">
+        <blockquote class="quncz_box ">
+            <div class="title">数据列表</div>
+        </blockquote>
+
+    </table>
+</body>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'js/modes/' //你存放新模块的目录，注意，不是layui的模块目录
+
+    }).use('storageTable'); //加载入口
+</script>
+<script type="text/html" id="creatTimeTpl">
+    
+    
+    
+    {{#  
+        
+        var reStrDate=function reStrDate(intDate) {
+            function add0(m) {
+                return m < 10 ? '0' + m : m
+            }
+
+            var sDate = new Date(intDate);
+            var year = sDate.getFullYear();
+            var month = sDate.getMonth() + 1;
+            var date = sDate.getDate();
+            var hours = sDate.getHours();
+            var minutes = sDate.getMinutes();
+            var seconds = sDate.getSeconds();
+            return year + '-' + add0(month) + '-' + add0(date)+ ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+        }
+    }}
+       
+    {{ reStrDate(d.creatTime) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="newUserTpl">
+    {{# if(d.newUser==0){ }}
+        未付费
+    {{# }else{ }}
+        付费
+    {{# } }}
+</script>
+<script type="text/html" id="photoTpl">
+
+    <img src={{d.clothingImg}} class="layui-table-link" style="width:105%;">
+    
+</script>
+<script type="text/html" id="sizeTpl">
+    <ul class="table_ul">
+            {{# if(d.clothingStocks.length==0){ }}
+                <li>
+                    无
+                </li>
+            {{# }else{ }}
+           
+                {{# for(var i=0;i < d.clothingStocks.length;i++){ }}
+                <li>
+                    {{d.clothingStocks[i].clothingStockType}}
+                </li>
+                {{# } }} 
+            {{# } }}
+    </ul>
+</script>
+<script type="text/html" id="stockTpl">
+    <ul class="table_ul">
+        
+            {{# if(d.clothingStocks.length==0){ }}
+                <li>
+                    无
+                </li>
+            {{# }else{ }}
+                {{# for(var i=0;i< d.clothingStocks.length;i++){ }}
+                    <li>
+                        {{d.clothingStocks[i].clothingStockTotal}} 件
+                    </li>
+                {{# } }}
+            {{# } }}
+    </ul>
+</script>
+<script type="text/html" id="stockNumTpl">
+    <ul class="table_ul">
+        
+            {{# if(d.clothingStocks.length==0){ }}
+                <li>
+                    无
+                </li>
+            {{# }else{ }}
+                {{# for(var i=0;i < d.clothingStocks.length;i++){ }}
+                    <li>
+                            {{d.clothingStocks[i].clothingStockNum}} 件
+                    </li>
+                {{# } }}
+            {{# } }}
+    </ul>
+</script>
+<script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" lay-filter="edit" data-id={{d.clothingId}}>编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" lay-filter="del" data-id={{d.clothingId}}>删除</a>
+  </script>
+<script type="text/html" id="return">
+    {{# for(var i=0;i < d.clothingStocks.length;i++){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="return" lay-filter="return" num="{{d.clothingStocks[i].clothingStockNum}}" all="{{d.clothingStocks[i].clothingStockTotal}}"  lay-data-stockId={{d.clothingStocks[i].clothingStockId}} >回库</a><br>
+    {{# } }}
+    
+  </script>
+<!-- 入库弹窗模板 -->
+<script type="text/html" id="addstockTpl">
+    <form class="layui-form addstock_son" lay-filter="addstock_son">
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">入库类别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="stockstyle" value="1" title="衣服入库" lay-filter="stockstyle" >
+                    <input type="radio" name="stockstyle" value="2" title="配饰入库" lay-filter="stockstyle" >
+                </div>
+            </div>
+            
+            <div class="layui-form-item checked_box">
+                            
+            </div>
+    </form>
+    
+  </script>
+
+<script type="text/html" id="checked_box1">
+    <div class="layui-form-item ">
+        <label class="layui-form-label">商品类目</label>
+        <div class="layui-input-inline">
+            <select id="levelOne" name="levelOne" lay-verType="tips" required lay-verify="required"  lay-filter="levelOne"></select> 
+            <select id="levelTwo" name="levelTwo" lay-verType="tips" required lay-verify="required"></select>
+        </div>
+        <div class="layui-input-inline">
+           
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品编号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="clothingNo"  lay-verType="tips" required lay-verify="required" placeholder="请输入商品编号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType1" name="stockType1">XS</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal1" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType2" name="stockType2">S</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal2" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType3" name="stockType3">M</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal3" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType4" name="stockType4">L</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal4" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType5" name="stockType5">XL</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal5" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label stockType6" name="stockType6">均码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="stockTotal6" placeholder="请输入服装库存" lay-verType="tips" required lay-verify="required" autocomplete="off" class="layui-input">
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="submitButton" class="layui-btn ajaxfuz" lay-submit lay-filter="submitButton">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="checked_box2">
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品编号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="clothingNo"  lay-verType="tips" required lay-verify="required" placeholder="请输入商品编号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">均码</label>
+        <div class="layui-input-inline">
+            <input type="number" name="stockType"  lay-verType="tips" required lay-verify="required" placeholder="请输入配饰库存" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn ajaxpeis" lay-submit  lay-filter="submitButton">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+</script>
+
+<script type="text/html" id='editTpl'>
+
+    <form  class="layui-form" lay-filter="editBox">
+        <input type="hidden" id="clothingId" name="clothingId">
+        <div class="layui-form-item left">
+            <label class="layui-form-label" style="display:block;">商品编号</label>
+            <div class="layui-input-inline">
+                <input type="text" id="clothingNo" name="clothingNo" readonly="readonly" value=""   autocomplete="off" class="layui-input layui-btn-disabled">
+            </div>
+            <div class="layui-form-mid layui-word-aux"></div>
+        </div>
+
+        <div class="layui-form-item left">
+            <label class="layui-form-label">XS-库存</label>
+            <div class="layui-input-inline">
+                <input type="number" name="XS" id="XS"     autocomplete="off" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                    <input type="number" name="NXS" id="NXS"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(现)</div>
+                </div>
+        </div>
+        <div class="layui-form-item left">
+            <label class="layui-form-label">S-库存</label>
+            <div class="layui-input-inline">
+                <input type="number" name="S" id="S"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="NS" id="NS"    autocomplete="off" class="layui-input">
+                <div class="layui-form-mid layui-word-aux">(现)</div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item left">
+            <label class="layui-form-label">M-库存</label>
+            <div class="layui-input-inline">
+                <input type="number" name="M" id="M"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="NM" id="NM"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(现)</div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item left">
+            <label class="layui-form-label">L-库存</label>
+            <div class="layui-input-inline">
+                <input type="number" name="L" id="L"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="NL" id="NL"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(现)</div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item left">
+            <label class="layui-form-label">XL-库存</label>
+            <div class="layui-input-inline">
+                <input type="number" name="XL" id="XL"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                <input type="number" name="NXL" id="NXL"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(现)</div>
+            </div>
+        </div>
+        
+        <div class="layui-form-item left">
+            <label class="layui-form-label">均码-库存</label>
+            <div class="layui-input-inline">
+                <input type="number"  name="JM" id="JM"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(总)</div>
+            </div>
+            <div class="layui-input-inline">
+                <input type="number"  name="NJM" id="NJM"    autocomplete="off" class="layui-input">
+                    <div class="layui-form-mid layui-word-aux">(现)</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="submitButton" class="layui-btn" lay-submit lay-filter="submitButton">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</script>
+
+</html>

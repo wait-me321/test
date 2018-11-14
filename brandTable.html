@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>品牌管理</title>
+
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/brandTable.css">
+</head>
+
+<body>
+    <div class="top_nav">
+        <div class="border_left">品牌管理</div>
+    </div>
+    <div class="layui-row top_row">
+        <div class="layui-col-xs4 layui-col-sm2 layui-col-md4 layui-col-lg3 show_div">
+            <div class="layui-col-item show_box">
+                <div class="item font1">全部品牌</div>
+                <div class="item font2">000</div>
+            </div>
+        </div>
+        <div class="layui-col-xs4 layui-col-sm2 layui-col-md4 layui-col-lg3 show_div">
+            <div class="layui-col-item show_box">
+                <div class="item font1">启用品牌</div>
+                <div class="item font2">000</div>
+            </div>
+        </div>
+        <div class="layui-col-xs4 layui-col-sm2 layui-col-md4 layui-col-lg3 show_div">
+            <div class="layui-col-item show_box">
+                <div class="item font1">停用品牌</div>
+                <div class="item font2">000</div>
+            </div>
+        </div>
+    </div>
+    <div class="table_box">
+        <table id="brandTable" lay-filter="brandTable">
+
+        </table>
+    </div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'js/modes/' //你存放新模块的目录，注意，不是layui的模块目录
+
+    }).use('brandTable'); //加载入口
+
+</script>
+<script type="text/html" id="brandDetailImgTpl">
+    <img src={{d.brandDetailImg}} alt="" style="width: 101%">
+</script>
+<script type="text/html" id="brandDetailLogoTpl">
+    <img src={{d.brandDetailLogo}} alt="" style="width: 101%">
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button title="" class="layui-btn  layui-btn-xs" lay-event="bianji" lay-filter="bianji" ><i class="layui-icon">&#xe642;</i>编辑</button><br>
+    <button title="" class="layui-btn layui-btn-danger  layui-btn-xs" lay-event="delBrand" lay-filter="delBrand" ><i class="layui-icon">&#xe640;</i>删除</button><br>
+</script>
+<script type="text/html" id="createTimeTpl">
+    
+    
+    
+    {{#  
+        
+        var reStrDate=function reStrDate(intDate) {
+            function add0(m) {
+                return m < 10 ? '0' + m : m
+            }
+
+            var sDate = new Date(intDate);
+            var year = sDate.getFullYear();
+            var month = sDate.getMonth() + 1;
+            var date = sDate.getDate();
+            var hours = sDate.getHours();
+            var minutes = sDate.getMinutes();
+            var seconds = sDate.getSeconds();
+            return year + '-' + add0(month) + '-' + add0(date)+ ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+        }
+    }}
+       
+    {{ reStrDate(d.createTime) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="editBrandTpl">
+    <div class="layui-form " lay-filter="editBrand">
+            <div class="layui-form-item">
+                <label class="layui-form-label">品牌名称</label>
+                <div class="layui-input-inline">
+                        <input type="text" name="brandName" lay-vertype="tips" required="" lay-verify="required"  placeholder="请输入品牌名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="well"></div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">品牌描述</label>
+                <div class="layui-input-inline">
+                        <textarea name="brandDesc" lay-vertype="tips" required="" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div> 
+            <div class="well"></div>
+
+            <div class="layui-form-item file_box">
+                    <div class="left">
+                            
+                            <label class="layui-form-label">品牌logo</label>
+                            <div>
+                                <img src="http://img-cdn.xykoo.cn/brand/YIYUAN/DetailImg" alt="" width=100 height=100 >
+                                <div class="well"></div>
+                                <button  class="layui-btn layui-btn-xs">选择文件</button>
+                            </div>
+                    </div>
+                    <div class="right">
+                        
+                            <label class="layui-form-label">品牌大图</label>
+                            <div>
+                                <img src="http://img-cdn.xykoo.cn/brand/YIYUAN/DetailImg" alt="" width=100 height=100 >
+                                <div class="well"></div>
+                                <button  class="layui-btn layui-btn-xs">选择文件</button>
+                            </div>
+                    </div>
+            </div>
+            <div class="well"></div>
+            <hr>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                        <button class="layui-btn" lay-submit lay-filter="editBrandSub">立即提交</button>
+                        <button  class="layui-btn layui-btn-primary" lay-filter="editBrandSubCancel">取消</button>
+                </div>
+            </div> 
+    </div>
+</script>
+
+<script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="addBrand">添加品牌</button>
+      <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="all">全部品牌</button>
+      <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="on">启用的品牌</button>
+      <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="off">停用的品牌</button>
+    </div>
+</script>
+
+<script type="text/html" id="brandStatusTpl">
+    
+        <input type="checkbox" name="brandStatus" lay-skin="switch" lay-text="上架|下架" lay-filter="brandStatus" value={{d.brandId}} {{ d.status == 1 ? 'checked' : '' }}>         
+ 
+
+    
+    
+</script>
+
+</html>

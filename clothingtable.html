@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商品管理</title>
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/clothingtable.css">
+    <link rel="stylesheet" href="css/tinyImgUpload.css">
+
+</head>
+
+<body>
+    <div class="top_nav">
+        <div class="border_left">商品管理</div>
+    </div>
+    <br>
+    <div class="search_box layui-form layui-row layui-col-space15" lay-filter="search_box">
+        <div class="layui-input-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2">
+            <input class="layui-input" name="s_clothingNo" lay-vertype="tips"  autocomplete="off" placeholder="请输入商品编号">
+                <!-- lay-verify="required" -->
+        </div>
+        <div class="layui-input-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg2">
+            <input class="layui-input" name="s_clothingName" lay-vertype="tips"  autocomplete="off" placeholder="请输入商品名称">
+                <!-- lay-verify="required" -->
+        </div>
+        <div class="layui-inline layui-col-xs6 layui-col-sm3 layui-col-md3 layui-col-lg2">
+                <input type="text" name="time" class="layui-input " id="time"  placeholder="请选择时间" title="格式'yyyy-mm-dd hh:mm:ss'">
+                <div class="date1"></div>
+        </div>
+        
+        <div class="layui-inline layui-col-xs6 layui-col-sm1 layui-col-md2 layui-col-lg1">
+            <div class="layui-btn layui-btn-danger search_No_btn layui-col-xs12 layui-col-md12 layui-col-lg12" lay-filter="search_No" lay-submit>搜索</div>
+        </div>
+        <div class="layui-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg1">
+                <div class="layui-btn search_all layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12" lay-filter="search_all" lay-submit>全部商品</div>
+        </div>
+        <div class="layui-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg1">
+                <div class="layui-btn search_1 layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12" lay-filter="search_1" lay-submit>上架商品</div>
+        </div>
+            
+        <div class="layui-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg1">
+                <div class="layui-btn search_2 layui-col-xs12  layui-col-sm12 layui-col-md12 layui-col-lg12" lay-filter="search_2" lay-submit>下架商品</div>
+        </div>
+        <div class="layui-inline layui-col-xs6 layui-col-sm2 layui-col-md2 layui-col-lg1">
+                <div class="layui-btn layui-btn-normal search_2 layui-col-xs12  layui-col-sm12 layui-col-md12 layui-col-lg12 " lay-filter="Popularity"  lay-submit>人气服装</div>
+        </div>
+        
+        
+    </div>
+
+
+    <div class="table_box">
+        <table id="clothingtable" lay-filter="clothingtable">
+        </table>
+    </div>
+
+
+</body>
+<script src="layui/layui.js"></script>
+<script src="js/modes/tinyImgUpload.js"></script>
+<script>
+    layui.config({
+        base: 'js/modes/' //你存放新模块的目录，注意，不是layui的模块目录
+
+    }).use('clothingtable'); //加载入口
+
+</script>
+<script type="text/html" id="clothingImgUrlTpl">
+    {{# if(d.starSameStyle==0){ }}
+
+    {{# }else if(d.starSameStyle==1){ }}
+            <span style="
+                position: absolute;
+                color: #020202;
+                background: #ffe500;
+                top: 0;
+                left: 0;
+                padding:2px;
+                opacity: 0.8;
+            " >明星同款</span>
+    {{# }  }}
+    <img src={{d.clothingImgUrl}} alt="" style="width: 102%">
+</script>
+<script type="text/html" id="clothingStatusTpl">
+
+        <input  type="checkbox" data-id={{d.clothingId}} name="clothingStatus" lay-skin="switch" lay-text="上架|下架" lay-filter="clothingStatus" value={{d.clothingId}} {{ d.clothingStatus == 1 ? 'checked' : '' }}> <br>        
+        <!-- <input  type="checkbox" data-id={{d.clothingId}} name="addPopularity" lay-skin="switch" lay-text="人气商品|人气商品" lay-filter="addPopularity" value={{d.clothingId}} {{ d.starSameStyle == 1 ? 'checked' : '' }}>  <br>         -->
+    
+
+    
+    
+</script>
+<script type="text/html" id="biaoqianTpl">
+    {{# function newdate(){ }}
+        {{# var T=new Date()  }}
+        {{# return T.getTime()  }}
+    {{# } }}
+    {{# var sortId=[{value: 1,title: "新品"},{value: 2,title: "推荐"},{value: 0,title: "默认"} ] }} 
+    {{# for(var i = 0;i < sortId.length; i++ ){ }}
+        {{# var T=newdate() }}
+        {{# if(d.clothingSortId == sortId[i].value){ }}
+               
+                <input type="radio" data-id={{d.clothingId}} class="clothingSortId" name={{T}} value={{sortId[i].value}}   title={{sortId[i].title}} lay-filter="clothingSortId" checked data-last="true"><br>    
+            {{# }else{  }}
+                <input type="radio" data-id={{d.clothingId}} class="clothingSortId" name={{T}} value={{sortId[i].value}}  title={{sortId[i].title}} lay-filter="clothingSortId" ><br>
+           
+        {{# }  }}
+    {{# } }}
+    
+        
+
+    
+    
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button title="" class="layui-btn  layui-btn-xs" lay-event="bianji" lay-filter="bianji" ><i class="layui-icon">&#xe642;</i>编辑</button><br>
+    <button title="" class="layui-btn  layui-btn-xs layui-btn-normal" lay-event="addPopularity" lay-filter="addPopularity" ><i class="layui-icon">&#xe608;</i>人气</button><br>
+    <button title="" class="layui-btn  layui-btn-xs layui-btn-warm" lay-event="deletePopularity" lay-filter="deletePopularity" ><i class="layui-icon">&#xe6c5;</i>取消人气</button><br>
+    <button title="" class="layui-btn layui-btn-danger  layui-btn-xs" lay-event="delclothing" lay-filter="delclothing" ><i class="layui-icon">&#xe640;</i>删除</button><br>
+</script>
+<script type="text/html" id="ClothingDTO">
+    <div class="layui-form layui-row" lay-filter="ClothingDTO">
+            <div class="layui-form-item layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3 ">
+                <label class="layui-form-label">商品编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="clothingNo" lay-vertype="tips" required="" lay-verify="required"  autocomplete="off" placeholder="请输入商品编号" class="layui-input">
+                    <button class="layui-btn layui-btn-xs search_btn" lay-filter="searchClothing">查询</button>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">商品名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="clothingName" lay-vertype="tips" required="" lay-verify="required"  autocomplete="off" placeholder="请输入商品名称" class="layui-input">
+                </div>
+            </div>      
+            <div class="layui-form-item layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">参考价格</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="clothingPrice" lay-vertype="tips" required="" lay-verify="required"  autocomplete="off" placeholder="请输入参考价格" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">商品品牌</label>
+                <div class="layui-input-inline">
+                        <select name="brandlist" lay-search lay-vertype="tips" required="" lay-verify="required">
+                        </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">商品风格</label>
+                <div class="layui-input-inline clothingStyle">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3 ">
+                <label class="layui-form-label">买手推荐语</label>
+                <div class="layui-input-inline">
+                    <textarea name="clothingExplain" lay-vertype="tips" required="" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            
+            <div class="well"></div>
+            <div class="layui-form-item layui-form-text layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 ">
+                <label class="layui-form-label">尺码表- <br><span class="clstyleName" style="background: #F44336; color:#fff;padding:2px;"></span></label>
+                <div class="layui-input-inline">
+                    <table id="sizeTable" lay-filter="sizeTable">
+                    </table>
+                    <div class="layui-btn onlySubSize">单独上传尺码</div>
+                </div>
+            </div>
+            
+            <div class="well"></div>
+            <div class="layui-form-item  layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3 ">
+                <label class="layui-form-label">操作</label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="shelves"  lay-skin="switch" lay-text="上架|下架" lay-filter="shelves">
+                    <input type="checkbox" name="starSameStyle" lay-skin="switch" lay-text="明星同款|明星同款" lay-filter="starSameStyle">
+                    <!-- <input type="checkbox" name="addPopularityClothing" lay-skin="switch" lay-text="人气商品|人气商品" lay-filter="addPopularityClothing"> -->
+                </div>
+            </div>
+            <div class="layui-form-item  layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3 ">
+                <label class="layui-form-label">分类</label>
+                <div class="layui-input-inline">
+                    
+                    <input type="radio" name="standards" value="1" title="新品" checked="">
+                    <input type="radio" name="standards" value="2" title="推荐">
+                    <input type="radio" name="standards" value="0" title="默认" >
+                </div>
+            </div>
+            <div class="layui-form-item  layui-col-xs12 layui-col-sm4 layui-col-md4 layui-col-lg3 ">
+                <label class="layui-form-label">占衣位</label>
+                <div class="layui-input-inline">
+                    
+                    <input type="radio" name="occupySeat" value="1" title="1" checked="">
+                    <input type="radio" name="occupySeat" value="2" title="2">
+                    <input type="radio" name="occupySeat" value="3" title="3" >
+                </div>
+            </div>
+            
+            
+            <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 ">
+                    <label class="layui-form-label">商品主图</label>
+                    <div class="layui-input-inline" id="mainImg" ></div>
+                </div>
+
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 ">
+                    <label class="layui-form-label">商品轮播图</label>
+                    <div class="layui-input-inline" id="banner" ></div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12 ">
+                    <label class="layui-form-label">商品衣袋图</label>
+                    <div class="layui-input-inline" id="details" ></div>
+                </div>
+            <div class="well"></div>
+            <hr style="width:100%">
+            <div class="layui-form-item clear_border">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit lay-filter="addclothingSub">立即提交</button>
+                    <button  class="layui-btn layui-btn-primary" lay-filter="addclothingSubCancel">取消</button>
+                </div>
+            </div>
+            
+    </div>
+</script>
+<script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="addclothing">添加商品</button>
+    </div>
+</script>
+
+</html>

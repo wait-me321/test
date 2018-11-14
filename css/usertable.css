@@ -1,0 +1,186 @@
+body{
+    box-sizing: border-box;
+    /* min-width: 1024px; */
+    padding: 10px;
+    background-color: #F6F7FC !important;
+}
+
+.layui-table-grid-down{
+    background:#ccc;
+  width:100%;
+      height:100%;
+opacity:0
+  }
+.layui-table-tips-main {
+    /* width: 200px; */
+    max-height: 100%!important;
+    overflow-y: inherit!important;
+}
+
+.layui-table-tips-main img{
+    width: 250px!important;
+}
+
+.layui-laypage-count{
+    white-space: nowrap
+}
+.top_nav{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 5px  10px;
+    box-shadow: 0px 0px 20px 4px #ccc;
+    font-size: 20px;
+    height: auto;
+    font-weight: 600;
+}
+.top_nav .border_left{
+    display: inline-block;
+    border-left: 4px solid #4ECAB0;
+    padding: 0 5px;
+}
+
+.show_div{
+    white-space: nowrap;
+}
+.show_div .left{
+    padding: 10px;
+}
+.show_div .left img{
+    padding: 10px;
+    width: 100%;
+    max-width: 80px;
+    max-height: 80px;
+}
+.show_div .right{
+    padding: 10px;
+}
+.show_div .right>div{
+    padding: 2px;
+}
+.show_div .right>div.top{
+    font-size: 14px;
+    color: #939393;
+}
+
+.show_div .right>div.bottom{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+.layui-elem-quote{
+}
+.my-fluid{
+    width: 100%;
+    box-sizing: border-box;
+}
+.layui-table-view{
+    margin-top: 0;
+    
+}
+.layui-table-view .layui-table{
+    width: 100%;
+   
+}
+
+.layui-laypage{
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 540px;
+}
+.layui-table-page{
+    overflow: inherit;
+    padding-bottom: 40px;
+    overflow-y: hidden!important;
+}
+.layui-laypage .layui-laypage-skip{
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+#demo{
+    width: 100%;
+}
+
+.quncz_box{
+    
+    overflow-x: hidden;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 10px;
+    white-space: nowrap;
+    margin: 0;
+    border-radius: 2px;
+    
+}
+
+.quncz_box .title{
+    font-size: 16px;
+    display: inline-block;
+    border-left: 4px solid #4ECAB0;
+    padding: 0 5px;
+}
+
+.quncz_box .quncz{
+    display: flex;
+    justify-content: flex-end;
+    text-align: left;
+    flex-wrap: wrap;
+}
+
+.quncz_box .quncz .layui-btn{
+    /* border-radius: 10px!important; */
+    margin: 5px 5px!important;
+}
+.quncz_box{
+    background-color: #F3F3F3;
+    box-shadow: 0 0 11px 2px #ccc;
+}
+
+
+
+.content{
+    padding: 0 10px;
+    
+}
+
+.sendMessages_box{
+    padding: 10px 20px
+}
+
+
+
+.sendMessages_box .layui-btn-container{
+}
+[name=phonelist]{
+    height: auto;
+}
+.show_box{
+    padding: 10px;
+}
+.show_box>div{
+    padding: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 8px 2px #ccc
+
+}
+.show_box>div>i{
+    width: 30%;
+    font-size: 60px;
+    color: #00e404;
+}
+.giveCardTpl_form{
+    padding: 10px;
+}
