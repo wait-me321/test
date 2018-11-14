@@ -1079,7 +1079,8 @@ layui.define(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate
 
 
 
-    exports('ordertable', {}); //注意，这里是模块输出的核心，模块名必须和use时的模块名一致1231232312
+    exports('ordertable', {}); //注意，这里是模块输出的核心，模块名必须和use时的模块名一致1231232312呵呵呵
+    
 
 });
 //提交
