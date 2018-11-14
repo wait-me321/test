@@ -1057,7 +1057,7 @@ layui.define(['layer', 'form', "storageTable_tab", "laypage", "element", "laytpl
             if($(layero.selector + " .saoma").val()!=""){
               $(layero.selector + " [name=malist]").val($(layero.selector + " [name=malist]").val()+$(layero.selector + " .saoma").val()+"\n")
               $(layero.selector + " .saoma").val("")
-              $(layero.selector + " .saoma").focus()
+              $(layero.selector + " .saoma").focus() 
             }
           })
           form.on('submit(return_box)', function (data) {
