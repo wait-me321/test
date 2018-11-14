@@ -246,7 +246,9 @@ layui.define(['layer', 'form', "usertable", "laypage", "element", "laytpl", "lay
 
             alert_phone.val(phonelist.join(",\n"))
 
-            $(".sendMessages_box .layui-btn").on("click", function () {
+            
+          })
+          $(".sendMessages_box .layui-btn").on("click", function () {
             var filter = $(this).parents(".layui-form").attr("lay-filter")
 
             
@@ -254,7 +256,6 @@ layui.define(['layer', 'form', "usertable", "laypage", "element", "laytpl", "lay
 
             })
 
-          })
         }
       });
     },
@@ -271,14 +272,7 @@ layui.define(['layer', 'form', "usertable", "laypage", "element", "laytpl", "lay
           return
         }
       }
-      alert(type)
-      if (type == "-") {
-        json = {
-          phoneList: json,
-          cont: $(".layui-layer-content [name=cont]").val()
-        }
-
-      }else if (type == 0) {
+       if (type == 0) {
         json = {
           phoneList: 0,
           cont: $(".layui-layer-content [name=cont]").val()

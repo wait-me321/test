@@ -545,8 +545,7 @@ layui.define(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate
                             for (let i = 0; i < numlist.length; i++) {
                                 
                                     var str = String(numlist[i])
-
-                                    if (_this.val().substring(0, _this.val().length - 2) == str) {
+                                    if (_this.val().substring(0, _this.val().length - _this.val().split(/[a-zA-Z]/)[_this.val().split(/[a-zA-Z]/).length-1].length-1) == str) {
                                         
                                         // for (let i = 0; i < numlist_1.length; i++) {
                                             
@@ -556,8 +555,8 @@ layui.define(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate
                                             }   
                                             if(str!= numlist_1[i]){
                                                 _this.parents(".layui-form-item").find(".layui-form-checkbox").addClass("layui-form-checked")
-                                                
-                                                numlist_1[i]=_this.val().substring(0, _this.val().length - 2)
+                                                // _this.val().split(/[a-zA-Z]/);
+                                                numlist_1[i]=_this.val().substring(0, _this.val().length - _this.val().split(/[a-zA-Z]/)[_this.val().split(/[a-zA-Z]/).length-1]-1)
                                                 
                                                 
                                                 // layer.msg("对")
