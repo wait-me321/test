@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>仓储管理</title>
+
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/public.css">
+    <!-- <link rel="stylesheet" href="css/warehouse.css"> -->
+    <style type="text/css">
+      
+        .hide {
+            display: none
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="top_nav">
+        <div class="border_left">仓储管理</div>
+    </div>
+    <br>
+    <div class="layui-btn-container">
+        <div class="layui-btn addWarehouse" >新增仓库</div>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" onclick="window.location.href='';">刷新</a>
+        <!-- <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="reload()">reload</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="query()">query</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="add(null);">新增一行</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="openorclose();">隐藏或打开香蕉节点</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="getCheckData();">获取选中行数据</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="getCheckLength();">获取选中数目</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="print();">打印缓存对象</a> -->
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="openAll();">展开或折叠全部</a>
+        <!-- <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="radioStatus();">获取单选数据</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-xstree" data-onclick="test();">test</a> -->
+    </div>
+
+    <div class="table_box">
+        <table id="warehouseTable" lay-filter="warehouseTable">
+
+        </table>
+    </div>
+
+</body>
+<script src="layui/layui.js"></script>
+<script src="js/modes/warehouse.js"></script>
+<script>
+    var reStrDate = function reStrDate(intDate) {
+        function add0(m) {
+            return m < 10 ? '0' + m : m
+        }
+
+        var sDate = new Date(intDate);
+        var year = sDate.getFullYear();
+        var month = sDate.getMonth() + 1;
+        var date = sDate.getDate();
+        var hours = sDate.getHours();
+        var minutes = sDate.getMinutes();
+        var seconds = sDate.getSeconds();
+        return year + '-' + add0(month) + '-' + add0(date) + ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+    }
+</script>
+<script type="text/html" id="headPhotoTpl">
+    {{# if(d.articleStatus==1){ }}
+    <span style="
+                position: absolute;
+                color: #020202;
+                background: #ffe500;
+                top: 0;
+                left: 0;
+                padding:2px;
+                opacity: 0.8;
+            " >精选</span>
+    {{# } }}
+    <img src={{d.headPhoto}} alt="" style="width: 101%">
+</script>
+<script type="text/html" id="articleStatusTpl">
+    <input type="checkbox" name="{{d.articleStatus}}" value="{{d.articleId}}" lay-skin="switch" lay-text="精选|默认" lay-filter="articleStatus" {{ d.articleStatus == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="articleImagesTpl">
+    {{# for(var i = 0; i< d.articleImages.length;i++){ }}
+    {{# var widthpr= 100/(d.articleImages.length+1)+"%"  }}
+        <img src={{d.articleImages[i]}} alt="" style="width:{{widthpr}}">
+    {{# } }}
+    
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button title="" class="layui-btn layui-btn-danger  layui-btn-xs" lay-event="delcommunity" lay-filter="delcommunity" ><i class="layui-icon">&#xe640;</i>删除</button><br>
+</script>
+<script type="text/html" id="createDateTpl">
+
+    {{ reStrDate(d.createDate) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="updateDateTpl">
+
+    {{ reStrDate(d.updateDate) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+           
+
+        <button class="layui-btn layui-btn-sm" lay-event="openadd">添加仓库</button>
+        
+    </div>
+</script>
+
+<script type="text/html" id="depositYNTpl">
+
+    {{# if(d.depositYN==1){ }}      
+        有押金
+    {{# }else{  }}
+        无押金
+    {{# }  }}
+</script>
+<script type="text/html" id="payMethodTpl">
+
+    {{# if(d.payMethod==1){ }}      
+        支付宝
+    {{# }else if(d.payMethod==2){  }}
+        微信
+    {{# }  }}
+</script>
+<script type="text/html" id="payTypeTpl">
+
+    {{# if(d.payType==1){ }}      
+        月卡
+    {{# }else if(d.payType==2){  }}
+        季卡
+    {{# }else if(d.payType==3){  }}
+        年卡
+    {{# }else if(d.payType==6){  }}
+        加衣券
+    {{# }  }}
+</script>
+
+
+<script type="text/html" id="addTpl">
+
+    <div class="layui-form" style="padding:10px">
+      <div class="layui-form-item">
+          <label class="layui-form-label">仓库编号</label>
+          <div class="layui-input-block">
+            <input type="text" name="warehouseNo" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库编号" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">仓库名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="warehouseName" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库名称" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">仓库地址</label>
+          <div class="layui-input-block">
+            <input type="text" name="warehouseAddress" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库地址" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">仓库负责人</label>
+          <div class="layui-input-block">
+            <input type="text" name="warehousePersonLiable" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库负责人" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">仓库描述</label>
+          <div class="layui-input-block">
+            <input type="text" name="warehouseDetails" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库描述" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="addbtn">提交</button>
+              <button class="layui-btn layui-btn-primary" lay-submit lay-filter="quxiao">取消</button>
+          </div>
+      </div>
+    </div>
+  </script>
+  <script type="text/html" id="addTpl2">
+  
+    <div class="layui-form" style="padding:10px">
+      <div class="layui-form-item">
+          <label class="layui-form-label">库区编号</label>
+          <div class="layui-input-block">
+            <input type="text" name="partitionNo" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库编号" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+            <label class="layui-form-label">仓库编号</label>
+            <div class="layui-input-block">
+              <input type="text" name="warehouseNo" readonly required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库负责人" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">库区名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="partitionName" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库名称" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      
+     
+      <div class="layui-form-item">
+          <label class="layui-form-label">库区描述</label>
+          <div class="layui-input-block">
+            <input type="text" name="partitionDesc" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库描述" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="addbtn2">提交</button>
+              <button class="layui-btn layui-btn-primary" lay-submit lay-filter="quxiao">取消</button>
+          </div>
+      </div>
+    </div>
+  </script>
+  <script type="text/html" id="addTpl3">
+  
+    <div class="layui-form" style="padding:10px">
+      <div class="layui-form-item">
+          <label class="layui-form-label">库位编号</label>
+          <div class="layui-input-block">
+            <input type="text" name="positionNo" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库编号" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      
+      <div class="layui-form-item">
+            <label class="layui-form-label">仓库编号</label>
+            <div class="layui-input-block">
+              <input type="text" name="warehouseNo" readonly required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库编号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+              <label class="layui-form-label">库区编号</label>
+              <div class="layui-input-block">
+                <input type="text" name="partitionNo" readonly required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库编号" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">库位名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="positionName" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库名称" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">库位描述</label>
+          <div class="layui-input-block">
+            <input type="text" name="positionDesc" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入仓库描述" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="addbtn3">提交</button>
+              <button class="layui-btn layui-btn-primary" lay-submit lay-filter="quxiao">取消</button>
+          </div>
+      </div>
+    </div>
+  </script>
+
+<script type="text/html" id="aboutTpl">
+    {{# var positionNumber=0  }}
+    {{# if(d.lay_level==1){  }}
+
+        {{#
+            for(let i =0 ;i < d.children.length;i++){
+                for(let j =0 ;j < d.children[i].length;j++){
+                    positionNumber+=d.children[i][j].positionNumber
+                }
+            }
+        }}
+        {{positionNumber}}
+    {{#  }else if(d.lay_level==2){ }}
+        {{#
+            for(let i =0 ;i < d.children.length;i++){
+                    positionNumber+=d.children[i].positionNumber
+                
+            }
+        }}
+        {{positionNumber}}
+   
+    {{#  }else if(d.lay_level==3){ }}
+           {{positionNumber}}
+    {{#  } }}
+   
+ </script>
+
+
+
+<script>
+// function convertBase64UrlToBlob(urlData){  
+
+// var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte  
+
+// //处理异常,将ascii码小于0的转换为大于0  
+// var ab = new ArrayBuffer(bytes.length);  
+// var ia = new Uint8Array(ab);  
+// for (var i = 0; i < bytes.length; i++) {  
+//     ia[i] = bytes.charCodeAt(i);  
+// }  
+
+// return new Blob( [ab] , {type : 'image/png'});  
+// } 
+
+// var r = new FileReader();
+//             var image = new Image();
+//             f = convertBase64UrlToBlob("");
+
+//             r.readAsDataURL(f);
+
+//             r.onload = function(e) {
+
+//                 console.log(this.result)
+//                 // document.getElementById('show'+imgid).src = this.result;
+
+//                 // console.log(this.result)
+//             //    console.log(active.dataURLtoFile(this.result,"file"))
+
+//             }
+</script>
+
+
+</html>

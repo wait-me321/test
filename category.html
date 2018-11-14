@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>品类管理</title>
+
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/public.css">
+    <!-- <link rel="stylesheet" href="css/warehouse.css"> -->
+    <style type="text/css">
+      
+
+        .hide {
+            display: none
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="top_nav">
+        <div class="border_left">品类管理</div>
+    </div>
+    <br>
+
+    <div class="table_box">
+        <table id="categoryTable" lay-filter="categoryTable">
+
+        </table>
+    </div>
+
+</body>
+<script src="layui/layui.js"></script>
+<script src="js/modes/category.js"></script>
+<script>
+    var reStrDate = function reStrDate(intDate) {
+        function add0(m) {
+            return m < 10 ? '0' + m : m
+        }
+
+        var sDate = new Date(intDate);
+        var year = sDate.getFullYear();
+        var month = sDate.getMonth() + 1;
+        var date = sDate.getDate();
+        var hours = sDate.getHours();
+        var minutes = sDate.getMinutes();
+        var seconds = sDate.getSeconds();
+        return year + '-' + add0(month) + '-' + add0(date) + ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+    }
+</script>
+<script type="text/html" id="headPhotoTpl">
+    {{# if(d.articleStatus==1){ }}
+    <span style="
+                position: absolute;
+                color: #020202;
+                background: #ffe500;
+                top: 0;
+                left: 0;
+                padding:2px;
+                opacity: 0.8;
+            " >精选</span>
+    {{# } }}
+    <img src={{d.headPhoto}} alt="" style="width: 101%">
+</script>
+<script type="text/html" id="articleStatusTpl">
+    <input type="checkbox" name="{{d.articleStatus}}" value="{{d.articleId}}" lay-skin="switch" lay-text="精选|默认" lay-filter="articleStatus" {{ d.articleStatus == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="articleImagesTpl">
+    {{# for(var i = 0; i< d.articleImages.length;i++){ }}
+    {{# var widthpr= 100/(d.articleImages.length+1)+"%"  }}
+        <img src={{d.articleImages[i]}} alt="" style="width:{{widthpr}}">
+    {{# } }}
+    
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button title="" class="layui-btn   layui-btn-xs" style="background:#1ABC9C ;" lay-event="delcommunity" lay-filter="sort" >排序</button><br>
+    <button title="" class="layui-btn   layui-btn-xs" style="background:#2894CF " lay-event="delcommunity" lay-filter="delcommunity" >修改</button><br>
+</script>
+<script type="text/html" id="createDateTpl">
+
+    {{ reStrDate(d.createDate) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="updateDateTpl">
+
+    {{ reStrDate(d.updateDate) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+           
+
+        <button class="layui-btn layui-btn-sm" lay-event="openadd">添加仓库</button>
+        <button class="layui-btn layui-btn-sm" lay-event="save">保存</button>
+        <span>点击表格进行编辑-&gt;然后保存</span>
+
+        
+    </div>
+</script>
+
+<script type="text/html" id="depositYNTpl">
+
+    {{# if(d.depositYN==1){ }}      
+        有押金
+    {{# }else{  }}
+        无押金
+    {{# }  }}
+</script>
+<script type="text/html" id="payMethodTpl">
+
+    {{# if(d.payMethod==1){ }}      
+        支付宝
+    {{# }else if(d.payMethod==2){  }}
+        微信
+    {{# }  }}
+</script>
+<script type="text/html" id="payTypeTpl">
+
+    {{# if(d.payType==1){ }}      
+        月卡
+    {{# }else if(d.payType==2){  }}
+        季卡
+    {{# }else if(d.payType==3){  }}
+        年卡
+    {{# }else if(d.payType==6){  }}
+        加衣券
+    {{# }  }}
+</script>
+
+
+<script type="text/html" id="addTpl">
+
+    <div class="layui-form" style="padding:10px">
+      <div class="layui-form-item">
+          <label class="layui-form-label">品类名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="categoryName" required lay-search lay-vertype="tips" lay-verify="required" placeholder="请输入品类名称" autocomplete="off" class="layui-input">
+          </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label"></label>
+          <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="addbtn">提交</button>
+              <button class="layui-btn layui-btn-primary quxiao"  lay-filter="quxiao">取消</button>
+          </div>
+      </div>
+    </div>
+  </script>
+
+<script type="text/html" id="aboutTpl">
+    {{# var positionNumber=0  }}
+    {{# if(d.lay_level==1){  }}
+
+        {{#
+            for(let i =0 ;i < d.children.length;i++){
+                for(let j =0 ;j < d.children[i].length;j++){
+                    positionNumber+=d.children[i][j].positionNumber
+                }
+            }
+        }}
+        {{positionNumber}}
+    {{#  }else if(d.lay_level==2){ }}
+        {{#
+            for(let i =0 ;i < d.children.length;i++){
+                    positionNumber+=d.children[i].positionNumber
+                
+            }
+        }}
+        {{positionNumber}}
+   
+    {{#  }else if(d.lay_level==3){ }}
+           {{positionNumber}}
+    {{#  } }}
+   
+ </script>
+
+
+
+<script>
+// function convertBase64UrlToBlob(urlData){  
+
+// var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte  
+
+// //处理异常,将ascii码小于0的转换为大于0  
+// var ab = new ArrayBuffer(bytes.length);  
+// var ia = new Uint8Array(ab);  
+// for (var i = 0; i < bytes.length; i++) {  
+//     ia[i] = bytes.charCodeAt(i);  
+// }  
+
+// return new Blob( [ab] , {type : 'image/png'});  
+// } 
+
+// var r = new FileReader();
+//             var image = new Image();
+//             f = convertBase64UrlToBlob("");
+
+//             r.readAsDataURL(f);
+
+//             r.onload = function(e) {
+
+//                 console.log(this.result)
+//                 // document.getElementById('show'+imgid).src = this.result;
+
+//                 // console.log(this.result)
+//             //    console.log(active.dataURLtoFile(this.result,"file"))
+
+//             }
+</script>
+
+
+</html>

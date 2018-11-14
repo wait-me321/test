@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文件管理</title>
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/updatafiles.css">
+</head>
+
+<body>
+    <blockquote class="layui-elem-quote">文件管理</blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>上传模块</legend>
+        <div class="layui-field-box">
+            <div class="layui-upload layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">路径</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="route" required lay-verify="required" placeholder="请输入路径" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="describe" required lay-verify="required" placeholder="请输入描述"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+
+                        <input type="radio" name="type" value="1" title="管理页面"" checked=" true">
+                        <input type="radio" name="type" value="2" title="活动页面"><br>（1：管理端，2：活动页）
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                    </div>
+                </div>
+                <div class="layui-upload-list layui-form-item">
+
+                    <label class="layui-form-label"></label>
+
+                    <div class="layui-input-block">
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th>文件名</th>
+                                    <th>预览</th>
+                                    <th>大小</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="demoList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn" lay-submit id="testListAction" lay-filter="testListAction">开始上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field">
+        <legend>删除模块</legend>
+        <div class="layui-field-box">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">删除路径</label>
+                    <!-- <div class="layui-form-mid layui-word-aux">http://console.xykoo.cn/</div> -->
+                    <div class="layui-input-inline">
+                        <textarea name="names" placeholder="请输入删除路径+文件名" class="layui-textarea"></textarea>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">批量删除路径用逗号隔开</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+
+                        <input type="radio" name="type1" value="1" title="管理页面"" checked=" true">
+                        <input type="radio" name="type1" value="2" title="活动页面"><br>（1：管理端，2：活动页）
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn" lay-submit id="delect" lay-filter="delect">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field">
+        <legend>上传新版apk</legend>
+        <div class="layui-field-box">
+            <div class="layui-form">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn layui-btn-normal" id="apkfile">选择apk</button>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+
+                    <div class="layui-input-inline">
+                        <button type="button" class="layui-btn" lay-submit id="upapp" lay-filter="upapp">开始上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+<script src="layui/layui.js"></script>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form', "upload"], function () {
+        // localStorage.setItem("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5aWt1QXBwQWRtaW4iLCJhZG1pbiI6NiwianRpIjoiOEMxQzY1MEMtODlCQS00OERFLUJCMDUtMzY3RTM4REM2OTlCIn0.d29VWB4xBIhV9bhKq5NU81FIAoxb4VXiQsOFqW7Ep4Q")
+        var layer = layui.layer
+        var form = layui.form;
+        var $ = layui.$;
+        var upload = layui.upload;
+        var token = localStorage.getItem("token")
+        layer.msg('Hello World');
+
+        var demoListView = $('#demoList')
+            , uploadListIns = upload.render({
+                elem: '#testList'
+                , url: 'http://api.xykoo.cn/manage/file/uploadConsoleFile' //上传接口
+                , headers: {
+                    "X-Auth-Token": token
+                }
+                , method: 'post'
+                , data: {
+                    route: function () {
+                        return $("[name=route]").val()
+                    },
+
+                    describe: function () {
+                        return $("[name=describe]").val()
+                    },
+                    type: function () {
+                        return $("[name=type]:checked").val()
+                    }
+
+
+                }
+                , field: "files"
+                , accept: 'file'
+                , multiple: true
+                , auto: false
+                , bindAction: '#testListAction'
+                , choose: function (obj) {
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function (index, file, result) {
+                        var tr = $(['<tr id="upload-' + index + '">'
+                            , '<td>' + file.name + '</td>'
+                            , '<td><img width=100 height=100 src=' + result + ' alt /></td>'
+                            , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
+                            , '<td>等待上传</td>'
+                            , '<td>'
+                            , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            , '</td>'
+                            , '</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function () {
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function () {
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                }
+                , done: function (res, index, upload) {
+                    if (res.status == 200) { //上传成功
+                        var tr = demoListView.find('tr#upload-' + index)
+                            , tds = tr.children();
+                        tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                        layer.confirm("删除已上传的文件队列吗？", function (index) {
+                            $(tr).remove()
+                            layer.close(index)
+                        })
+
+                        //清空操作
+                        return delete this.files[index]; //删除文件队列已经上传成功的文件
+                    }
+                    this.error(index, upload);
+                }
+                , error: function (index, upload) {
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
+        form.on('submit(delect)', function (data) {
+            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+            deletefiles(data.field.names, data.field.type1)
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        function deletefiles(names, type, fn) {
+            var index = layer.load(2)
+            $.ajax({
+                url: "http://api.xykoo.cn/manage/file/deleteConsoleFile",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-Auth-Token", token);
+                },
+                type: 'post',// 引号
+                dataType: "json",
+                data: {
+                    names: names,
+                    type: type
+                },
+                success: function (data) {
+                    layer.close(index)
+                    switch (data.status) {
+                        case 200:
+                            if (typeof (fn) == "function") {
+                                fn(data)
+                            }
+                            layer.msg("删除成功", { icon: 1 });
+                            tableIns.reload({})
+                            break;
+                        case 401:
+                            layer.alert('请重新登录');
+                            break;
+                        default:
+                            layer.alert(data.msg);
+                            break;
+                    };
+
+                },
+                error: function () {
+                    layer.close(index)
+                    layer.alert("接口异常");
+                }
+            })
+        }
+        form.render()
+
+
+
+
+
+
+
+        upload.render({
+            elem: '#apkfile'
+            , url: ''
+            , auto: false //选择文件后不自动上传
+            , bindAction: '#upapp' //指向一个按钮触发上传
+            , choose: function (obj) {
+                //将每次选择的文件追加到文件队列
+                var files = obj.pushFile();
+
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function (index, file, result) {
+                    console.log(index); //得到文件索引
+                    console.log(file); //得到文件对象
+                    console.log(result); //得到文件base64编码，比如图片
+
+                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+
+                    //这里还可以做一些 append 文件列表 DOM 的操作
+
+                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                });
+            }, before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(2); //上传loading
+            }, done: function (res, index, upload) {
+                if (res.status == 200) { //上传成功
+                        layer.closeAll('loading')
+                    //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+            }
+            , error: function (index, upload) {
+                layer.closeAll('loading')
+                
+            }
+
+        });
+    });
+
+
+</script>
+
+<script type="text/html" id="clothingImgUrlTpl">
+    <img src={{d.clothingImgUrl}} alt="" style="width: 101%">
+</script>
+
+</html>

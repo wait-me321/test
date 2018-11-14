@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>热门穿搭管理</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/addActivityPic.css"">
+</head>
+<body>
+    <div class=" top_nav">
+    <div class="border_left">热门穿搭管理</div>
+    </div>
+    <div class="table_box">
+
+        <input type="file" hidden class="file_img" data-id={{d.specialId}} accept="image/*">
+        <table id="addActivityPicTable" lay-filter="addActivityPicTable">
+        </table>
+    </div>
+    </body>
+    <script src="layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: 'js/modes/' //你存放新模块的目录，注意，不是layui的模块目录
+
+        }).use('addHotWearPic'); //加载入口
+    </script>
+    <script type="text/html" id="specialImgTpl">
+    <img src={{d.hotWearImg}} class="selectImg" alt="" style="width: 100%">
+</script>
+    <script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="addActivity">添加热门穿搭</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="save">保存</button>
+            <button class="layui-btn layui-btn-sm layui-btn-warm" onclick="window.location.href=''" lay-event="reload">刷新</button>
+    </div>
+</script>
+    <script type="text/html" id="caozuoTpl">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del"">删除</button>
+    </div>
+</script>
+    <script type="text/html" id="addActivityDTO">
+    <div class="layui-form addActivity" lay-filter="addActivityDTO" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接</label>
+            <div class="layui-input-inline">
+                <input type="text" name="specialUrl" required lay-verType="tips"  lay-verify="required" placeholder="请输入链接" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">添加图片</label>
+            <div class="layui-input-inline">
+                <input type="text"  name="specialImg" required lay-verType="tips"  lay-verify="required" style="width:0;height:0;border:0">
+                <button type="button" class="layui-btn" id="updateImg" >
+                    <i class="layui-icon">&#xe67c;</i>选择图片
+                </button>
+                <img src="" class="updateSelectImg" style="width:100%;max-width:300px;min-height:200px;background:#eee" alt="">
+                
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="upImg">立即提交</button>
+              <!-- <button  class="layui-btn layui-btn-primary">取消</button> -->
+            </div>
+        </div>
+    </div>
+</script>
+
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>打印</title>
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+
+</head>
+<style type="text/css" media="screen">
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow: hidden;
+        margin: 0;
+        padding: 1px;
+        border: 1px solid #ccc;
+    }
+
+    .img_box {
+        width: 100%;
+
+    }
+
+    .img_box img {
+        width: 100%;
+        display: block;
+    }
+
+    .big_box {
+        width: 100%;
+    }
+
+    .layui-btn {
+        position: relative;
+        z-index: 1000000000;
+        display: block;
+        height: 38px;
+        line-height: 38px;
+        padding: 0 18px;
+        background-color: #009688;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        filter: alpha(opacity=90);
+        margin: 10px auto;
+    }
+
+    .layui-btn:hover {
+        opacity: .8;
+        filter: alpha(opacity=80);
+        color: #fff
+    }
+
+    .layui-btn:active {
+        opacity: 1;
+        filter: alpha(opacity=100)
+    }
+
+    .layui-btn+.layui-btn {
+        margin-left: 0px;
+    }
+
+    .layui-btn-radius {
+        border-radius: 100px;
+    }
+</style>
+
+<body style="margin:0;padding:0;">
+    <div class="big_box">
+
+
+    </div>
+</body>
+<script src="layui/layui.js"></script>
+<script src="http://console.xykoo.cn/yikuadmin/js/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+<script>
+
+    // JsBarcode("#text", "A919191911MAa", {//A909909099MAa
+    //   format: "CODE128",
+    //   lineColor: "#000",
+    //   width:1,
+    //   height:25,
+    //   displayValue: true,
+    //   margin:0,
+    //   fontSize:15,
+    //   fontOptions: "bold"
+    // });
+    layui.use(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate"], function (exports) {
+        localStorage.setItem("newtoken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3d3cueHlrb28uY24iLCJhZG1pbiI6MTUsImp0aSI6Ijc4RUQ5RTA3LUE2MTgtNERBMS1BQzU0LUY2RTYxNDM3QjYxNyJ9.9wNGFrhB7cfwVXetw0VMPgiFQC9dddYmPcqUiEEIC9M")
+        var layer = layui.layer
+            , form = layui.form
+            , $ = layui.$
+            , laypage = layui.laypage
+            , laydate = layui.laydate
+            , element = layui.element
+            , laytpl = layui.laytpl
+            , table = layui.table
+            , active
+            , token = localStorage.getItem("token")
+            , newtoken = localStorage.getItem("newtoken")
+            , sizeObj
+            , carousel = layui.carousel;
+        layer.msg('欢迎进入', { time: 1000, anim: 1 });
+
+
+
+
+
+
+        var WWW = "http://api.console.xykoo.cn/";
+        var newtoken = localStorage.getItem("newtoken");
+        // var  token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ3d3cueHlrb28uY24iLCJhZG1pbiI6MTUsImp0aSI6Ijc4RUQ5RTA3LUE2MTgtNERBMS1BQzU0LUY2RTYxNDM3QjYxNyJ9.9wNGFrhB7cfwVXetw0VMPgiFQC9dddYmPcqUiEEIC9M"
+
+        function getma(json, fn, efn, f) {
+            var index = layer.load(2)
+            setTimeout(function () {
+                layer.close(index)
+            }, 5000)
+            $.ajax({
+                url: WWW + 'clothingNo/generatePrintNo',
+
+                beforeSend: function (request) {
+                    request.setRequestHeader("token", newtoken);
+                    request.setRequestHeader("Accept", "*/*");
+                },
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    layer.closeAll('loading')
+                    console.log(data);
+                    switch (data.status) {
+
+                        case 200:
+                            if (typeof (fn) == "function") {
+                                fn(data)
+                                if (typeof (dfn) == "function" && f == true) {
+                                    dfn(data)
+                                }
+
+                            }
+                            break;
+                        case 401:
+                            layer.confirm('请重新登录', function () {
+                                window.location.href = "login.html"
+                            });
+                            break;
+                        default:
+                            layer.msg(data.msg);
+                            break;
+                    };
+
+
+
+
+                },
+                error: function () {
+                    layer.closeAll('loading')
+                    layer.closeAll('loading')
+                }
+            })
+        }
+
+
+        function intdata(data, model) {
+            for (let i = 0; i < data.length; i++) {
+                if(model=="A"){
+                    model="XS"
+                }else if(model=="B"){
+                    model="XL"
+                }
+                $(".big_box").append("  <div  class='img_box' style='display:flex;justify-content: center; align-items:center;width:98%;'><svg id=" + model + "></svg>")
+                $(".big_box").append("<button type='button' class='layui-btn print'>打印" + model + "码</button>")
+                // alert(data[i]+"-"+model)
+                JsBarcode("#" + model, String(data[i]), {//A909909099MAa
+                    format: "CODE128",
+                    lineColor: "#000",
+                    width: 1,
+                    height: 25,
+                    displayValue: true,
+                    margin: 0,
+                    fontSize: 15,
+                    fontOptions: "bold"
+                });
+                $(".print").unbind()
+                $(".print").on("click", function () {
+                        // console.error("dayin");
+                    $(".img_box").hide()
+                    $(this).prev().show()
+                    $(".print").hide()
+                    window.print();
+                    // setTimeout(function () {
+                        $(".print").show();
+                        $(".img_box").show()
+                    // }, 1000)
+                    return false
+                    // window.location.href = window.location.href;
+                })
+
+
+            };
+
+
+
+
+
+        }
+
+        sizeObj = JSON.parse(GetQueryString("sizeObj"))
+       
+
+        for (let i in sizeObj) {
+            var obj = {}
+            if (sizeObj[i] != "" || sizeObj[i] != false) {
+                obj.model = i
+                obj.number = sizeObj[i]
+
+                var json = {
+                    clothingNumber: GetQueryString("newNo"),
+                    numberList: [
+                        obj
+                    ]
+                }
+                getma(json, function (data) {
+                    intdata(data.data, i)
+                    
+                })
+            }
+
+
+        }
+
+
+
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+
+
+        //   function myPrint(obj){
+        //     var newWindow=window.open("打印窗口","_blank");
+        //     newWindow.document.body.style.margin=0
+        //     newWindow.document.body.style.padding=0
+        //     console.log(obj.html());
+        //     var docStr = obj.html();
+        //     newWindow.document.write(docStr);
+        //     newWindow.document.close();
+        //     newWindow.print();
+        //     window.location.href=window.location.href;
+        // }
+
+
+        // var data={
+        //           "status": 200,
+        //           "data": {
+        //             "fail": [],
+        //             "success": [
+        //               "http://console.xykoo.cn/barCode/3020042S0.png",
+        //               // "http://console.xykoo.cn/barCode/3020042S1.png",
+        //               // "http://console.xykoo.cn/barCode/3020042M0.png",
+        //               // "http://console.xykoo.cn/barCode/3020042M1.png",
+        //               // "http://console.xykoo.cn/barCode/3020042M2.png"
+        //             ]
+        //           }
+        //         }
+        //         if (data.status==200) {
+        //             intdata(data.data.success)
+        //         };
+    })
+</script>
+
+</html>

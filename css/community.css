@@ -1,0 +1,69 @@
+body{
+    padding: 10px;
+}
+
+.layui-table-grid-down{
+    background:#ccc;
+    width:100%;
+    height:100%;
+    opacity:0
+  }
+.layui-table-tips-main {
+    /* width: 200px; */
+    max-height: 100%!important;
+    overflow-y: inherit!important;
+}
+
+.layui-table-tips-main img{
+    width: 250px!important;
+}
+
+.layui-laypage-count{
+    white-space: nowrap
+}
+.layui-table{
+    width: 100%!important;
+}
+
+.layui-table-cell{
+    height: auto;
+    
+    
+}
+.laytable-cell-1-brandDesc{
+    white-space: normal;
+}
+
+.layui-laypage{
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 540px;
+}
+.layui-table-page{
+    overflow: inherit;
+    padding-bottom: 40px;
+    overflow-y: hidden!important;
+}
+.layui-laypage .layui-laypage-skip{
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+.top_nav{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 5px  10px;
+    box-shadow: 0px 0px 20px 4px #ccc;
+    font-size: 20px;
+    height: auto;
+    font-weight: 600;
+}
+.top_nav .border_left{
+    display: inline-block;
+    border-left: 4px solid #4ECAB0;
+    padding: 0 5px;
+}
+.show_div {
+    background: #fff;
+}

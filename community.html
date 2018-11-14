@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>社区管理</title>
+
+
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/community.css">
+</head>
+
+<body>
+    <div class="top_nav">
+        <div class="border_left">社区管理</div>
+    </div>
+    <div class="table_box">
+        <table id="communityTable" lay-filter="communityTable">
+
+        </table>
+    </div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'js/modes/' //你存放新模块的目录，注意，不是layui的模块目录
+
+    }).use('community'); //加载入口
+
+</script>
+<script type="text/html" id="headPhotoTpl">
+    {{# if(d.articleStatus==1){ }}
+    <span style="
+                position: absolute;
+                color: #020202;
+                background: #ffe500;
+                top: 0;
+                left: 0;
+                padding:2px;
+                opacity: 0.8;
+            " >精选</span>
+    {{# } }}
+    <img src={{d.headPhoto}} alt="" style="width: 101%">
+</script>
+<script type="text/html" id="articleStatusTpl">
+    <input type="checkbox" name="{{d.articleStatus}}" value="{{d.articleId}}" lay-skin="switch" lay-text="精选|默认" lay-filter="articleStatus" {{ d.articleStatus == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="articleImagesTpl">
+    {{# for(var i = 0; i< d.articleImages.length;i++){ }}
+    {{# var widthpr= 100/(d.articleImages.length+1)+"%"  }}
+        <img src={{d.articleImages[i]}} alt="" style="width:{{widthpr}}">
+    {{# } }}
+    
+</script>
+<script type="text/html" id="caozuoTpl">
+    <button title="" class="layui-btn layui-btn-danger  layui-btn-xs" lay-event="delcommunity" lay-filter="delcommunity" ><i class="layui-icon">&#xe640;</i>删除</button><br>
+</script>
+<script type="text/html" id="createTimeTpl">
+    
+    
+    
+    {{#  
+        
+        var reStrDate=function reStrDate(intDate) {
+            function add0(m) {
+                return m < 10 ? '0' + m : m
+            }
+
+            var sDate = new Date(intDate);
+            var year = sDate.getFullYear();
+            var month = sDate.getMonth() + 1;
+            var date = sDate.getDate();
+            var hours = sDate.getHours();
+            var minutes = sDate.getMinutes();
+            var seconds = sDate.getSeconds();
+            return year + '-' + add0(month) + '-' + add0(date)+ ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+        }
+    }}
+       
+    {{ reStrDate(d.createTime) }}
+     
+       
+    
+</script>
+
+<script type="text/html" id="toolbarTpl">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="jinxun">精选</button>
+      <button class="layui-btn layui-btn-sm" lay-event="all">全部</button>
+    </div>
+</script>
+
+<script type="text/html" id="brandStatusTpl">
+    
+    {{# if(d.status==1){ }}
+        <input type="checkbox" name="brandStatus" lay-skin="switch" lay-text="上架|下架" lay-filter="brandStatus" value="1" checked>         
+    {{# }else{  }}
+        <input type="checkbox" name="brandStatus" lay-skin="switch" lay-text="上架|下架" lay-filter="brandStatus" value="1" >
+    {{# }  }}
+
+    
+    
+</script>
+
+<script>
+// function convertBase64UrlToBlob(urlData){  
+
+// var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte  
+
+// //处理异常,将ascii码小于0的转换为大于0  
+// var ab = new ArrayBuffer(bytes.length);  
+// var ia = new Uint8Array(ab);  
+// for (var i = 0; i < bytes.length; i++) {  
+//     ia[i] = bytes.charCodeAt(i);  
+// }  
+
+// return new Blob( [ab] , {type : 'image/png'});  
+// } 
+
+// var r = new FileReader();
+//             var image = new Image();
+//             f = convertBase64UrlToBlob("");
+            
+//             r.readAsDataURL(f);
+
+//             r.onload = function(e) {
+
+//                 console.log(this.result)
+//                 // document.getElementById('show'+imgid).src = this.result;
+
+//                 // console.log(this.result)
+//             //    console.log(active.dataURLtoFile(this.result,"file"))
+
+//             }
+</script>
+</html>

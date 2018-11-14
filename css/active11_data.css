@@ -1,0 +1,131 @@
+body{
+    padding: 10px;
+}
+
+.layui-table-grid-down{
+    background:#ccc;
+    width:100%;
+    height:100%;
+    opacity:0
+  }
+.layui-table-tips-main {
+    /* width: 200px; */
+    max-height: 100%!important;
+    overflow-y: inherit!important;
+}
+
+.layui-table-tips-main img{
+    width: 250px!important;
+}
+
+.layui-laypage-count{
+    white-space: nowrap
+}
+.layui-table{
+    width: 100%!important;
+}
+
+.layui-table-cell{
+    height: auto;
+    
+    
+}
+.laytable-cell-1-brandDesc{
+    white-space: normal;
+}
+
+.layui-laypage{
+    display: flex;
+    flex-wrap: nowrap;
+    min-width: 540px;
+}
+.layui-table-page{
+    overflow: inherit;
+    padding-bottom: 40px;
+    overflow-y: hidden!important;
+}
+.layui-laypage .layui-laypage-skip{
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+.top_nav{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 5px  10px;
+    box-shadow: 0px 0px 20px 4px #ccc;
+    font-size: 20px;
+    height: auto;
+    font-weight: 600;
+}
+.top_nav .border_left{
+    display: inline-block;
+    border-left: 4px solid #4ECAB0;
+    padding: 0 5px;
+}
+.show_div {
+    background: #fff;
+}
+.suosou_box{
+    padding: 15px 0 0;
+}
+.show_div{
+    white-space: nowrap;
+    width: 100%;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center
+}
+
+.show_div .left{
+    padding: 10px;
+}
+.show_div .left img{
+    padding: 10px;
+    width: 100%;
+    max-width: 80px;
+    max-height: 80px;
+}
+.show_div .right{
+    padding: 10px;
+}
+.show_div .right>div{
+    padding: 2px;
+}
+.show_div .right>div.top{
+    font-size: 14px;
+    color: #939393;
+}
+
+.show_div .right>div.bottom{
+    font-size: 18px;
+    font-weight: 600;
+}
+.show_box{
+    padding: 10px;
+}
+.show_box>div{
+    padding: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 8px 2px #ccc
+
+}
+.show_box>div>i{
+    width: 30%;
+    font-size: 60px;
+    color: #00e404;
+}
+@media (max-width:800px){
+    .show_div{
+        justify-content: flex-start;
+    }
+}
