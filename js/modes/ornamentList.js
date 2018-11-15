@@ -106,12 +106,12 @@ layui.use(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate"],
                     // console.log(data.elem); //得到radio原始DOM对象
     
                     $(data.elem).attr("checked", true)
-                    layer.confirm("确定更改？", { closeBtn: 0, offset: 0 }, function (index1) {
+                    // layer.confirm("确定更改？", { closeBtn: 0, offset: 0 }, function (index1) {
                         // console.log(data)
                         var index = layer.load(2)
                         var clothingId = $(data.elem).attr("data-id")
                         //模拟提交的网络延迟
-                        active.clothingLabel(clothingId, data.value, index, index1)
+                        active.clothingLabel(clothingId, data.value, index )
                         // setTimeout(function () {
                         //     layer.close(index)
                         //     layer.close(index1)
@@ -121,27 +121,27 @@ layui.use(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate"],
                         // }, 1000)
     
     
-                    }, function () {
-                        //取消的操作
-                        $("[name=" + $(data.elem).attr('name') + "]").each(function (i, v) {
-                            if ($(v).attr("data-last") == "true") {
-                                $(v).click()
-                                form.render()
-                            }
-                        })
+                    // }, function () {
+                    //     //取消的操作
+                    //     $("[name=" + $(data.elem).attr('name') + "]").each(function (i, v) {
+                    //         if ($(v).attr("data-last") == "true") {
+                    //             $(v).click()
+                    //             form.render()
+                    //         }
+                    //     })
     
-                    })
+                    // })
                     //被点击的radio的value值
                 });
                 form.on('switch(clothingStatus)', function (obj) {
                     // console.log(obj)
-                    layer.confirm("确定更改？", { closeBtn: 0, offset: 0 }, function (index1) {
+                    // layer.confirm("确定更改？", { closeBtn: 0, offset: 0 }, function (index1) {
     
                         var index = layer.load(2)
                         var status
                         obj.elem.checked ? status = 1 : status = 2;
                         //模拟提交的网络延迟
-                        active.updateClothing(obj.value, status, index, index1)
+                        active.updateClothing(obj.value, status, index)
                         // active.clothingLabel(clothingId, data.val, index, index1)
                         // setTimeout(function () {
                         //     layer.close(index)
@@ -152,13 +152,13 @@ layui.use(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate"],
                         // }, 1000)
     
     
-                    }, function () {
-                        //取消的操作
-                        $(obj.elem).click()
-                        form.render()
+                    // }, function () {
+                    //     //取消的操作
+                    //     $(obj.elem).click()
+                    //     form.render()
     
     
-                    })
+                    // })
                     // layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
                 })
                 // form.on('switch(starSameStyle)', function (obj) {
@@ -983,6 +983,7 @@ layui.use(['layer', 'form', "table", "laypage", "element", "laytpl", "laydate"],
                 return false
         })
         form.on('submit(addclothingSub)', function (data) {
+
             var cldata=data.field
             var formData=new FormData()
             var mainImgSrc = [];//商品主图

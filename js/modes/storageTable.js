@@ -93,18 +93,19 @@ layui.define(['layer', 'form', "storageTable_tab", "laypage", "element", "laytpl
       })
       $(".layui-btn[lay-event=return]").on("click", function () {
         var _this=$(this)
-        layer.confirm("确定回库吗？",function(){
             if(Number(_this.attr("num"))>=Number(_this.attr("all"))){
               layer.msg("库存已满，无法回库!")
               return false;
             }else{
+              layer.confirm("确定回库吗？",function(){
               active.storage(_this.attr("lay-data-stockId"),1,function(){
                 layer.msg("回库成功！",{icon:1})
                 tableIns.reload({})
               })
+              })
             }
             
-        })
+        
         
       })
 
